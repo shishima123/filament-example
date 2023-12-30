@@ -117,7 +117,13 @@ class EmployeeResource extends Resource
                 ->dateTime()
                 ->sortable()
                 ->toggleable(isToggledHiddenByDefault: true),
-        ])->filters([//
+        ])->filters([
+            Tables\Filters\SelectFilter::make('Department')
+                ->relationship('department', 'name')
+                ->searchable()
+                ->preload()
+                ->label('Filter by Department')
+                ->indicator('Department')
         ])->actions([
             Tables\Actions\ViewAction::make(),
             Tables\Actions\EditAction::make(),
@@ -131,12 +137,12 @@ class EmployeeResource extends Resource
     public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist->schema([
-            Infolists\Components\Section::make('User Name')->schema([
+            Infolists\Components\Section::make('Name')->schema([
                 Infolists\Components\TextEntry::make('first_name'),
                 Infolists\Components\TextEntry::make('middle_name'),
                 Infolists\Components\TextEntry::make('last_name'),
             ])->columns(3),
-            Infolists\Components\Section::make('User Address')->schema([
+            Infolists\Components\Section::make('Address')->schema([
                 Infolists\Components\TextEntry::make('country.name'),
                 Infolists\Components\TextEntry::make('state.name'),
                 Infolists\Components\TextEntry::make('city.name'),
@@ -144,7 +150,7 @@ class EmployeeResource extends Resource
                 Infolists\Components\TextEntry::make('address'),
                 Infolists\Components\TextEntry::make('zip_code'),
             ])->columns(2),
-            Infolists\Components\Section::make('User Address')->schema([
+            Infolists\Components\Section::make('Dates')->schema([
                 Infolists\Components\TextEntry::make('date_of_birth')->dateTime('d-m-Y'),
                 Infolists\Components\TextEntry::make('date_hired')->dateTime('d-m-Y'),
             ])->columns(2)
